@@ -1,0 +1,105 @@
+package AkdemirEslem;
+import robocode.*;
+
+// API help : https://robocode.sourceforge.io/docs/robocode/robocode/JuniorRobot.html
+
+/**
+ * EVA01 - a robot by (your name here)
+ */
+public class EVA01 extends JuniorRobot
+{ 
+	int turnDirection = 2;
+	/**
+	 * run: EVA01's default behavior
+	 */
+	public void run() {
+		// Sets these colors (robot parts): body, gun, radar, bullet, scan_arc
+	    setColors(purple, green, orange, black, black);
+		
+		while(true) {
+			ahead(200);
+			turnGunLeft(360);
+			turnRight(5 * turnDirection);
+			turnGunLeft(360);
+			back(200);
+			turnGunLeft(360);
+			ahead(500);
+			turnGunLeft(360);
+			back(200);
+			turnGunLeft(360);
+			turnLeft(300);
+			turnGunLeft(360);
+						
+			if(energy <= 20){
+			ahead(1000);
+			turnLeft(1200);
+			ahead(1000);
+			turnRight(1200);
+			}
+		}
+	}
+	public void onScannedRobot() {
+		if (scannedBearing >= 0) {
+			turnDirection = 1;
+		} else {
+			turnDirection = -1;
+	    }
+		bearGunTo(scannedBearing);
+		if(scannedEnergy > 41) {
+		fire(1);
+		turnRight(200);
+		ahead(500);
+		}else if (scannedDistance >= 200){
+		fire(1);
+		}else {
+		ahead(scannedDistance + 10);
+		bearGunTo(scannedBearing);
+		fire();
+		fire(3);
+		fire();
+		turnRight(scannedBearing);
+		bearGunTo(scannedBearing);
+		ahead(scannedDistance + 10);
+		fire(3);
+		fire(2);
+		}
+	}
+	/**
+	 * onHitByBullet: What to do when you're hit by a bullet
+	 */
+	public void onHitByBullet() {
+		turnRight(hitByBulletBearing + 200);
+		ahead(700);	
+	}
+	
+	/**
+	 * onHitWall: What to do when you hit a wall
+	 */
+	public void onHitWall() {
+		turnRight(hitWallBearing + 200);
+		back(20);
+		ahead(20);
+		turnLeft(hitWallBearing + 300);
+		ahead(30);
+		back(30);
+		ahead(200);
+	}
+	public void onHitRobot(){
+		if (scannedBearing >= 0){
+			turnDirection = 1;
+		} else {
+			turnDirection = -1;
+		}
+		if (scannedEnergy > 16){
+			fire(3);
+		}else if (scannedEnergy > 10){
+			fire(2);
+		}else if (scannedEnergy > 4) {
+			fire(1);
+		}else if (scannedEnergy > 2) {
+			fire(.5);
+		}else {
+			fire(.1);
+		}
+	}
+}
